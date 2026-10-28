@@ -1,0 +1,48 @@
+class BankAccount:
+    def __init__(self, owner: str, initial_balance: float = 0.0) -> None:
+        # Validate input before storing account information
+        if not owner.strip():
+            raise ValueError("Account owner cannot be empty.")
+
+        if initial_balance < 0:
+            raise ValueError("Initial balance cannot be negative.")
+
+        self.owner = owner  # Public attribute
+        self.__balance = initial_balance  # Name-mangled attribute
+
+    @property
+    def balance(self) -> float:
+        """Return the current balance without exposing direct modification."""
+        return self.__balance
+
+    def deposit(self, amount: float) -> None:
+        """Deposit a positive amount into the account."""
+        if amount <= 0:
+            raise ValueError("Deposit amount must be positive.")
+
+        self.__balance += amount
+
+    def withdraw(self, amount: float) -> None:
+        """Withdraw money if sufficient funds are available."""
+        if amount <= 0:
+            raise ValueError("Withdrawal amount must be positive.")
+
+        if amount > self.__balance:
+            raise ValueError("Insufficient funds.")
+
+        self.__balance -= amount
+
+
+def demonstrate_encapsulation() -> None:
+    print("\nENCAPSULATION")
+
+    account = BankAccount("abhi", 25000.0)
+    account.deposit(10000.0)
+    account.withdraw(1000.0)
+
+    print(f"Account owner: {account.owner}")
+    print(f"Current balance: {account.balance:.2f}")
+
+
+if __name__ == "__main__":
+    demonstrate_encapsulation()
