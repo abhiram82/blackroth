@@ -1,0 +1,31 @@
+from dataclasses import dataclass, field
+@dataclass
+class Teacher:
+    """Represent a teacher who can exist independently of a department."""
+    name: str
+@dataclass
+class Department:
+    """Represent a department that groups independently created teachers."""
+    name: str
+    teachers: list[Teacher] = field(default_factory=list)
+    def add_teacher(self, teacher: Teacher) -> None:
+        # Aggregation: reference a teacher created independently.
+        self.teachers.append(teacher)
+    def list_teachers(self) -> list[str]:
+        return [teacher.name for teacher in self.teachers]
+def demonstrate_aggregation() -> None:
+    print("\nAGGREGATION")
+    # Create teachers independently of the department.
+    teacher1 = Teacher("abhi")
+    teacher2 = Teacher("yeshu")
+    department = Department("Computer Science")
+    department.add_teacher(teacher1)
+    department.add_teacher(teacher2)
+    print(f"Department: {department.name}")
+    print(f"Teachers: {', '.join(department.list_teachers())}")
+    # Remove a teacher from the department.
+    department.teachers.remove(teacher1)
+    # The teacher still exists independently.
+    print(f"Teacher still exists: {teacher1.name}")
+if __name__ == "__main__":
+    demonstrate_aggregation()
